@@ -1,5 +1,5 @@
 import { Box, Button, Divider, Drawer } from "@mui/material"
-import ChatNavbar from "./chatNavbar"
+import ContactNavbar from "./contactNavbar"
 import SearchBar from "./searchBar"
 import ContactCard from "./contactCard"
 import ContactList from "./contactList"
@@ -14,7 +14,7 @@ const SidePanel = () => {
             flex: "1",
             overflowY: "scroll",
         }}>
-            <ChatNavbar />
+            <ContactNavbar />
             <SearchBar />
             <ContactList />
         </div>
