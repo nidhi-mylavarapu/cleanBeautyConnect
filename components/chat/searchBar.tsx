@@ -9,7 +9,7 @@ const SearchBar = () => {
             height: "40px",
         }}>
             <Input disableUnderline={true} defaultValue="Search for a User..." sx={{
-                color: '#f7b9af',
+                color: '#000000',
                 fontFamily: "Gill Sans",
                 width: "100%",
                 fontSize: "15px",

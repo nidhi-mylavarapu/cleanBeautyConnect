@@ -1,4 +1,4 @@
-import { Box, Button, Container, Divider, FormControl, FormHelperText, Grid, IconButton, Input, InputLabel, Link, Stack, TextField, Typography } from '@mui/material'
+import { Box, Button, Container, Divider, FormControl, FormHelperText, Grid, Icon, IconButton, Input, InputLabel, Link, Stack, TextField, Typography } from '@mui/material'
 import React from 'react'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Label, Visibility } from '@material-ui/icons';
@@ -89,9 +89,12 @@ const Register = () => {
                     
                 </FormControl>
                 <Stack direction="row">
-                    <IconButton>
-                        <AccountCircleIcon sx={{ color: "#FFFFFF" }} />
-                    </IconButton>
+                <input type="file" style={{display:"none"}} id="file"/>
+                <label htmlFor="file">
+                <Icon sx={{marginTop: "5px", marginRight: "5px", color: "#FFFFFF"}}>
+                    <AccountCircleIcon />
+                </Icon>
+                </label>
                     <Typography fontFamily={"Gill Sans"}
                         color="#FFFFFF"
                         fontSize={"15px"}

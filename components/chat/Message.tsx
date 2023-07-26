@@ -1,7 +1,12 @@
+import { Typography } from "@mui/material"
+
 const Message = () => 
 {
     return (
-        <div>Message</div>
+        <div>
+          Hi
+           
+        </div>
     )
 }
 

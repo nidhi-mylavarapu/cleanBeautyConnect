@@ -7,6 +7,7 @@ const ContactNavbar = () => {
         <div style={{
             backgroundColor: "#f8ada0",
             borderTopLeftRadius: "30px",
+            borderRight: "1px solid #da887a",
             height: "80px"
         }}>
             <Stack direction="row">
