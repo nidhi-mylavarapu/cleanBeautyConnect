@@ -5,7 +5,7 @@ import Register from "./register"
 
 const IndexPage = (  ) => (
   <Layout title="Home">
-    <Home/>
+    <Register/>
   </Layout>
 )
 

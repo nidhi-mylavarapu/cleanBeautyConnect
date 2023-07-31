@@ -1,4 +1,4 @@
-import { Input, InputAdornment } from "@mui/material"
+import { Box, Input, InputAdornment } from "@mui/material"
 import ChatNavbar from "./chatNavbar"
 import Messages from "./messages"
 import { AccountCircle } from "@mui/icons-material"
@@ -11,7 +11,7 @@ const ChatPanel = () => {
             borderTopRightRadius: "30px",
             borderBottomRightRadius: "30px",
             flex: "2",
-            position: "relative"
+            position: "relative",
         }}>
             <ChatNavbar/>
             <Messages/>

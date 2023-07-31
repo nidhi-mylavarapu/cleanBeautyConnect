@@ -12,7 +12,6 @@ const SidePanel = () => {
             borderTopLeftRadius: "30px",
             borderBottomLeftRadius: "30px",
             flex: "1",
-            overflowY: "scroll",
         }}>
             <ContactNavbar />
             <SearchBar />

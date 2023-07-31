@@ -1,7 +1,11 @@
-import { Box, Button, Container, Divider, FormControl, FormHelperText, Grid, Icon, IconButton, Input, InputLabel, Link, Stack, TextField, Typography } from '@mui/material'
-import React from 'react'
+import { Alert, Box, Button, Container, Divider, FormControl, FormHelperText, Grid, Icon, IconButton, Input, InputLabel, Link, Stack, TextField, Typography } from '@mui/material'
+import React, { useState } from 'react'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Label, Visibility } from '@material-ui/icons';
+import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth, db, storage } from '../util/firebase';
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { doc, setDoc } from "firebase/firestore";
 
 const registerBoxStyles = {
     borderRadius: "20px",
@@ -15,6 +19,16 @@ const formStyles = {
     color: 'white',
     fontFamily: "Gill Sans",
     fontSize: "20px",
+    marginBottom: "2px",
+    borderRadius: "10px",
+    paddingTop: "3px",
+    paddingX: "6px"
+}
+
+const inputStyles = {
+    color: 'white',
+    fontFamily: "Gill Sans",
+    fontSize: "20px",
     backgroundColor: "#DED6CE",
     marginBottom: "2px",
     borderRadius: "10px",
@@ -23,6 +37,51 @@ const formStyles = {
 }
 
 const Register = () => {
+
+    const [err, setErr] = useState(false)
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        const displayName: string = e.target[0].value;
+        const email: string = e.target[1].value;
+        const password: string = e.target[2].value;
+        const avatarImag = e.target[3].files[0];
+
+        try {
+            const res = await createUserWithEmailAndPassword(auth, email, password);
+
+
+            const storageRef = ref(storage, displayName);
+
+            const uploadTask = uploadBytesResumable(storageRef, avatarImag);
+
+            uploadTask.on('state_changed',
+                (error) => {
+                    setErr(true)
+                },
+                async () => {
+                    
+                    getDownloadURL(uploadTask.snapshot.ref).then( async (downloadURL) => {
+                        await updateProfile(res.user,{
+                            displayName,
+                            photoURL:downloadURL 
+                        });
+                        await setDoc(doc(db, "users", res.user.uid),{
+                            uid: res.user.uid,
+                            displayName,
+                            email,
+                            photoURL: downloadURL
+                        })
+                    });
+                }
+            );
+        }
+        catch (err) {
+            setErr(true)
+        }
+
+
+    }
     return (
         <Grid
             container
@@ -48,88 +107,89 @@ const Register = () => {
                 >
                     Register
                 </Typography>
-                <Typography
-                    paddingY="5px"
-                    fontFamily={"Gill Sans"}
-                    color="#DED6CE"
-                    fontSize={"15px"}
-                >
-                    Display Name
-                </Typography>
-                <FormControl sx={{ ...formStyles }}>
-                    <Input disableUnderline={true} sx={{ ...formStyles }}></Input>
-                </FormControl>
-                <Typography
-                    paddingY="5px"
-                    fontFamily={"Gill Sans"}
-                    color="#DED6CE"
-                    fontSize={"15px"}
-                >
-                    Email
-                </Typography>
-                <FormControl sx={{ ...formStyles }}>
-                    <Input disableUnderline={true} sx={{ ...formStyles }}></Input>
-                </FormControl>
+                <form style={{ ...formStyles }} onSubmit={handleSubmit}>
+                    <Typography
+                        paddingY="5px"
+                        fontFamily={"Gill Sans"}
+                        color="#DED6CE"
+                        fontSize={"15px"}
+                        align='center'
+                    >
+                        Display Name
+                    </Typography>
+                    <Input disableUnderline={true} sx={{ ...inputStyles }}></Input>
+                    <Typography
+                        paddingY="5px"
+                        fontFamily={"Gill Sans"}
+                        color="#DED6CE"
+                        fontSize={"15px"}
+                        align='center'
+                    >
+                        Email
+                    </Typography>
+                    <Input disableUnderline={true} sx={{ ...inputStyles }}></Input>
+
+                    <Typography
+                        paddingY="5px"
+                        fontFamily={"Gill Sans"}
+                        color="#DED6CE"
+                        fontSize={"15px"}
+                        marginLeft="5px"
+                        marginRight="5px"
+                        align='center'
+                    >
+                        Password
+                    </Typography>
+
+                    <Input disableUnderline={true} type="password" sx={{ ...inputStyles }}></Input>
+
+                    <Stack direction="row" marginLeft="55px"> {/* fix this */}
+                        <input type="file" style={{ display: "none" }} id="file" />
+                        <label htmlFor="file">
+                            <Icon sx={{ marginTop: "5px", marginRight: "5px", color: "#FFFFFF" }}>
+                                <AccountCircleIcon />
+                            </Icon>
+                        </label>
+                        <Typography fontFamily={"Gill Sans"}
+                            color="#FFFFFF"
+                            fontSize={"15px"}
+                            paddingTop="8px">Add an Avatar</Typography>
+                    </Stack>
+                    <Button variant="outlined" type="submit" sx={{
+                        color: "#DED6CE",
+                        borderWidth: "1px",
+                        borderColor: "#DED6CE",
+                        fontSize: "20px",
+                        textTransform: "none",
+                        fontFamily: "Gill Sans",
+                        marginLeft: "55px", /* fix this */
+                        "&:hover": { color: "#FFFFFF", backgroundColor: "#DED6CE", borderColor: "#DED6CE" },
+                    }}>
+                        Sign Up
+                    </Button>
+                    {err ? /* (<Alert severity="error">Please make sure you have entered a valid email address that has not been used previously.</Alert>) */ (<div>ERROR</div>) : <div></div>}
+
+                </form>
 
                 <Stack direction="row">
-                <Typography
-                    paddingY="5px"
-                    fontFamily={"Gill Sans"}
-                    color="#DED6CE"
-                    fontSize={"15px"}
-                    marginLeft="5px"
-                    marginRight="5px"
-                >
-                    Password
-                </Typography>
-                </Stack>
-                
-                <FormControl sx={{ ...formStyles }}>
-                    <Input disableUnderline={true} type="password" sx={{ ...formStyles}}></Input>
-                    
-                </FormControl>
-                <Stack direction="row">
-                <input type="file" style={{display:"none"}} id="file"/>
-                <label htmlFor="file">
-                <Icon sx={{marginTop: "5px", marginRight: "5px", color: "#FFFFFF"}}>
-                    <AccountCircleIcon />
-                </Icon>
-                </label>
-                    <Typography fontFamily={"Gill Sans"}
-                        color="#FFFFFF"
-                        fontSize={"15px"}
-                        paddingTop="8px">Add an Avatar</Typography>
-                </Stack>
-                <Button variant="outlined" sx={{
-                    color: "#DED6CE",
-                    borderWidth: "1px",
-                    borderColor: "#DED6CE",
-                    fontSize: "20px",
-                    textTransform: "none",
-                    fontFamily: "Gill Sans",
-                    "&:hover": { color: "#FFFFFF", backgroundColor: "#DED6CE", borderColor: "#DED6CE" },
-                }}>
-                    Sign Up
-                </Button>
-                <Stack direction="row">
-                <Typography marginTop="7px" marginRight="4px" fontFamily={"Gill Sans"}
+                    <Typography marginTop="7px" marginRight="4px" fontFamily={"Gill Sans"}
                         color="#FFFFFF"
                         fontSize={"17px"}
                         paddingTop="8px">
-                            Have an account?  
-                </Typography>
-                <Link marginTop="10px" fontFamily={"Gill Sans"}
+                        Have an account?
+                    </Typography>
+                    <Link marginTop="10px" fontFamily={"Gill Sans"}
                         color="#DED6CE"
                         fontSize={"17px"}
                         paddingTop="8px"
                         sx={{
-                            "&:hover": {fontWeight: 550},
+                            "&:hover": { fontWeight: 550 },
                         }}
-                        >
-                            Login.
-                </Link>
+                    >
+                        Login.
+                    </Link>
                 </Stack>
-                
+
             </Box>
         </Grid>
 

@@ -69,7 +69,7 @@ const Login = () => {
                     Password
                 </Typography>
                 <FormControl sx={{ ...formStyles }}>
-                    <Input disableUnderline={true} sx={{ ...formStyles}}></Input>
+                    <Input type="password" disableUnderline={true} sx={{ ...formStyles}}></Input>
                 </FormControl>
                 <Button variant="outlined" sx={{
                     color: "#DED6CE",
