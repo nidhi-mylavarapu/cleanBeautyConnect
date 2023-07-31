@@ -15,31 +15,31 @@ const TextingBar = () => {
             <FormControl sx={{ width: "100%", }}>
                 <Stack direction="row">
                     <Input disableUnderline={true} defaultValue="Send a message..." sx={{
-                        color: '#000000',
+                        color: '#da887a',
                         width: "100%",
                         fontFamily: "Gill Sans",
                         fontSize: "15px",
                         backgroundColor: "#FAE1DD",
                         paddingLeft: "5px"
                     }} />
-                 <div style={{ backgroundColor: "#FAE1DD", height: "40px", borderBottomRightRadius: "30px", width: "100px",}}>
-                    <input type="file" style={{ display: "none" }} id="attachFile" />
-                    <label htmlFor="attachFile">
-                        <Icon sx={{color: "#f7b9af", marginTop: "5px", "&:hover": {color: "#f8ada0"},}}>
-                            <AttachFile />
+                    <div style={{ backgroundColor: "#FAE1DD", height: "40px", borderBottomRightRadius: "30px", width: "100px", }}>
+                        <input type="file" style={{ display: "none" }} id="attachFile" />
+                        <label htmlFor="attachFile">
+                            <Icon sx={{ color: "#f7b9af", marginTop: "5px", "&:hover": { color: "#da887a" }, }}>
+                                <AttachFile />
+                            </Icon>
+                        </label>
+                        <input type="file" style={{ display: "none" }} id="image" />
+                        <label htmlFor="image">
+                            <Icon sx={{ color: "#f7b9af", marginTop: "5px", "&:hover": { color: "#da887a" }, }}>
+                                <ImageIcon />
+                            </Icon>
+                        </label>
+                        <Icon sx={{ color: "#f7b9af", marginTop: "5px", marginLeft: "5px", "&:hover": { color: "#da887a" }, }}>
+                            <SendIcon />
                         </Icon>
-                    </label>
-                    <input type="file" style={{ display: "none" }} id="image" />
-                    <label htmlFor="image">
-                    <Icon sx={{color: "#f7b9af", marginTop: "5px", "&:hover": {color: "#f8ada0"},}}>
-                            <ImageIcon />
-                        </Icon>
-                    </label>
-                    <Icon sx={{color: "#f7b9af", marginTop: "5px", marginLeft: "5px","&:hover": {color: "#f8ada0"},}}>
-                        <SendIcon />
-                    </Icon>
 
-                </div>
+                    </div>
                 </Stack>
 
             </FormControl>
