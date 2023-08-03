@@ -21,6 +21,7 @@ const Home = () => {
                 height: "550px",
                 borderRadius: "30px",
                 display: "flex",
+                boxShadow: 13
             }}>
                <SidePanel />
                <ChatPanel />

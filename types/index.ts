@@ -4,3 +4,10 @@ export type Upgrade = {
   basePrice: number
   incomePerTick: number
 }
+
+export type User = {
+  displayName: string
+  email: string
+  password: string
+  avatarImage: File
+}
