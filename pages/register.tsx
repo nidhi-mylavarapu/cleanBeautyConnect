@@ -1,11 +1,12 @@
 import { Alert, Box, Button, Container, Divider, FormControl, FormHelperText, Grid, Icon, IconButton, Input, InputLabel, Link, Stack, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { Label, Visibility } from '@material-ui/icons';
+import { Label, Visibility, VisibilityOff } from '@material-ui/icons';
 import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db, storage } from '../util/firebase';
 import { ref, uploadBytesResumable, getDownloadURL, uploadBytes } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore";
+import { redirect, useNavigate } from 'react-router-dom';
 
 const registerBoxStyles = {
     borderRadius: "20px",
@@ -38,6 +39,7 @@ const inputStyles = {
 
 const Register = () => {
 
+    const [showPassword, setShowPassword] = useState(false)
     const [err, setErr] = useState(false)
 
     const handleSubmit = async (e) => {
@@ -60,23 +62,19 @@ const Register = () => {
                     getDownloadURL(uploadTask.snapshot.ref).then(
                         (downloadURL) => {
                             updateProfile(res.user, {
-                                displayName, 
+                                displayName,
                                 photoURL: downloadURL
                             })
                             setDoc(doc(db, "users", res.user.uid), {
                                 uid: res.user.uid,
-                                displayName, 
-                                email, 
+                                displayName,
+                                email,
                                 photoURL: downloadURL
                             })
                         }
                     ).then(
                         () => {
-                            setDoc(doc(db, "userChats", res.user.uid), {})
-                        }
-                    ).then(
-                        () => {
-                            console.log("All done.")
+                            setDoc(doc(db, "userChats", res.user.uid), {});
                         }
                     )
                 },
@@ -140,27 +138,31 @@ const Register = () => {
                         Email
                     </Typography>
                     <Input disableUnderline={true} sx={{ ...inputStyles }}></Input>
+                    <Stack direction="row" marginLeft="35px">
+                        <IconButton onClick={() => setShowPassword(!showPassword)}>
+                            {showPassword ? <Visibility /> : <VisibilityOff />}
+                        </IconButton>
+                        <Typography
+                            paddingY="5px"
+                            fontFamily={"Gill Sans"}
+                            color="#DED6CE"
+                            fontSize={"15px"}
+                            marginLeft="5px"
+                            marginRight="5px"
+                            align='center'
+                        >
+                            Password
+                        </Typography>
+                    </Stack>
 
-                    <Typography
-                        paddingY="5px"
-                        fontFamily={"Gill Sans"}
-                        color="#DED6CE"
-                        fontSize={"15px"}
-                        marginLeft="5px"
-                        marginRight="5px"
-                        align='center'
-                    >
-                        Password
-                    </Typography>
+                    <Input disableUnderline={true} type={showPassword ? "" : "password"} sx={{ ...inputStyles }}></Input>
 
-                    <Input disableUnderline={true} type="password" sx={{ ...inputStyles }}></Input>
-
-                    <Stack direction="row" marginLeft="55px"> {/* fix this */}
+                    <Stack direction="row" marginLeft="45px"> {/* fix this */}
                         <input type="file" style={{ display: "none" }} id="file" />
                         <label htmlFor="file">
-                            <Icon sx={{ marginTop: "5px", marginRight: "5px", color: "#FFFFFF" }}>
+                            <IconButton sx={{ color: "#FFFFFF" }}>
                                 <AccountCircleIcon />
-                            </Icon>
+                            </IconButton>
                         </label>
                         <Typography fontFamily={"Gill Sans"}
                             color="#FFFFFF"

@@ -1,7 +1,7 @@
 import { Box, Button, Container, Divider, FormControl, FormHelperText, Grid, IconButton, Input, InputLabel, Link, Stack, Typography } from '@mui/material'
-import React from 'react'
+import React, { useState } from 'react'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { Label } from '@material-ui/icons';
+import { Label, Visibility, VisibilityOff } from '@material-ui/icons';
 
 const registerBoxStyles = {
     borderRadius: "20px",
@@ -24,6 +24,7 @@ const formStyles = {
 }
 
 const Login = () => {
+    const [showPassword, setShowPassword] = useState(false)
     return (
         <Grid
             container
@@ -60,16 +61,24 @@ const Login = () => {
                 <FormControl sx={{ ...formStyles }}>
                     <Input disableUnderline={true} sx={{ ...formStyles }}></Input>
                 </FormControl>
-                <Typography
-                    paddingY="5px"
-                    fontFamily={"Gill Sans"}
-                    color="#DED6CE"
-                    fontSize={"15px"}
-                >
-                    Password
-                </Typography>
+                <Stack direction="row" marginRight="35px">
+                        <IconButton onClick={() => setShowPassword(!showPassword)}>
+                            {showPassword ? <Visibility /> : <VisibilityOff />}
+                        </IconButton>
+                        <Typography
+                            paddingY="5px"
+                            fontFamily={"Gill Sans"}
+                            color="#DED6CE"
+                            fontSize={"15px"}
+                            marginLeft="5px"
+                            marginRight="5px"
+                            align='center'
+                        >
+                            Password
+                        </Typography>
+                    </Stack>
                 <FormControl sx={{ ...formStyles }}>
-                    <Input type="password" disableUnderline={true} sx={{ ...formStyles}}></Input>
+                    <Input type={showPassword ? "" : "password"}  disableUnderline={true} sx={{ ...formStyles}}></Input>
                 </FormControl>
                 <Button variant="outlined" sx={{
                     color: "#DED6CE",
