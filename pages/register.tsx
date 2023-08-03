@@ -4,7 +4,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Label, Visibility } from '@material-ui/icons';
 import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db, storage } from '../util/firebase';
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { ref, uploadBytesResumable, getDownloadURL, uploadBytes } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore";
 
 const registerBoxStyles = {
@@ -45,38 +45,50 @@ const Register = () => {
         const displayName: string = e.target[0].value;
         const email: string = e.target[1].value;
         const password: string = e.target[2].value;
-        const avatarImag = e.target[3].files[0];
+        const profilePic = e.target[3].files[0];
 
         try {
+            //Authentication
             const res = await createUserWithEmailAndPassword(auth, email, password);
 
-
+            //Storing profile picture
             const storageRef = ref(storage, displayName);
+            const uploadTask = uploadBytesResumable(storageRef, profilePic);
 
-            const uploadTask = uploadBytesResumable(storageRef, avatarImag);
-
-            uploadTask.on('state_changed',
-                (error) => {
-                    setErr(true)
+            uploadTask.then(
+                () => {
+                    getDownloadURL(uploadTask.snapshot.ref).then(
+                        (downloadURL) => {
+                            updateProfile(res.user, {
+                                displayName, 
+                                photoURL: downloadURL
+                            })
+                            setDoc(doc(db, "users", res.user.uid), {
+                                uid: res.user.uid,
+                                displayName, 
+                                email, 
+                                photoURL: downloadURL
+                            })
+                        }
+                    ).then(
+                        () => {
+                            setDoc(doc(db, "userChats", res.user.uid), {})
+                        }
+                    ).then(
+                        () => {
+                            console.log("All done.")
+                        }
+                    )
                 },
-                async () => {
-                    
-                    getDownloadURL(uploadTask.snapshot.ref).then( async (downloadURL) => {
-                        await updateProfile(res.user,{
-                            displayName,
-                            photoURL:downloadURL 
-                        });
-                        await setDoc(doc(db, "users", res.user.uid),{
-                            uid: res.user.uid,
-                            displayName,
-                            email,
-                            photoURL: downloadURL
-                        })
-                    });
+                () => {
+                    console.log('ERROR UPLOADING IMAGE');
                 }
-            );
+            )
+
+
         }
         catch (err) {
+            console.log("error true here")
             setErr(true)
         }
 
