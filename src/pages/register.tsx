@@ -1,4 +1,4 @@
-import { Alert, Box, Button, Container, Divider, FormControl, FormHelperText, Grid, Icon, IconButton, Input, InputLabel, Link, Stack, TextField, Typography } from '@mui/material'
+import { Alert, Box, Button, CircularProgress, Container, Divider, FormControl, FormHelperText, Grid, Icon, IconButton, Input, InputLabel, Link, Stack, TableCell, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Label, Visibility, VisibilityOff } from '@material-ui/icons';
@@ -6,7 +6,6 @@ import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase
 import { auth, db, storage } from '../util/firebase';
 import { ref, uploadBytesResumable, getDownloadURL, uploadBytes } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore";
-import { redirect, useNavigate } from 'react-router-dom';
 
 const registerBoxStyles = {
     borderRadius: "20px",
@@ -40,6 +39,7 @@ const inputStyles = {
 const Register = () => {
 
     const [showPassword, setShowPassword] = useState(false)
+    const [clickedSignup, setClickedSignup] = useState(false)
     const [err, setErr] = useState(false)
 
     const handleSubmit = async (e) => {
@@ -75,6 +75,7 @@ const Register = () => {
                     ).then(
                         () => {
                             setDoc(doc(db, "userChats", res.user.uid), {});
+                            window.location.href = '/';
                         }
                     )
                 },
@@ -92,6 +93,8 @@ const Register = () => {
 
 
     }
+
+
     return (
         <Grid
             container
@@ -138,10 +141,10 @@ const Register = () => {
                         Email
                     </Typography>
                     <Input disableUnderline={true} sx={{ ...inputStyles }}></Input>
-                    <Stack direction="row" marginLeft="35px">
-                        <IconButton onClick={() => setShowPassword(!showPassword)}>
+                    <Stack direction="row" marginLeft="50px">
+                        <Icon onClick={() => setShowPassword(!showPassword)} sx={{ marginTop: "5px", color: "#FFFFFF", "&:hover": { color: "#DED6CE" } }}>
                             {showPassword ? <Visibility /> : <VisibilityOff />}
-                        </IconButton>
+                        </Icon>
                         <Typography
                             paddingY="5px"
                             fontFamily={"Gill Sans"}
@@ -157,29 +160,39 @@ const Register = () => {
 
                     <Input disableUnderline={true} type={showPassword ? "" : "password"} sx={{ ...inputStyles }}></Input>
 
-                    <Stack direction="row" marginLeft="45px"> {/* fix this */}
-                        <input type="file" style={{ display: "none" }} id="file" />
-                        <label htmlFor="file">
-                            <IconButton sx={{ color: "#FFFFFF" }}>
+
+                    <input type="file" style={{ display: "none" }} id="file" />
+                    <label htmlFor="file">
+                        <Stack direction="row" marginLeft="45px"> {/* fix this */}
+                            <Icon sx={{ marginTop: "5px", marginRight: "5px", color: "#FFFFFF", "&:hover": { color: "#DED6CE" } }}>
                                 <AccountCircleIcon />
-                            </IconButton>
-                        </label>
-                        <Typography fontFamily={"Gill Sans"}
-                            color="#FFFFFF"
-                            fontSize={"15px"}
-                            paddingTop="8px">Add an Avatar</Typography>
-                    </Stack>
-                    <Button variant="outlined" type="submit" sx={{
-                        color: "#DED6CE",
+                            </Icon>
+                            <Typography fontFamily={"Gill Sans"}
+                                color="#FFFFFF"
+                                fontSize={"15px"}
+                                paddingTop="8px">Add an Avatar</Typography> </Stack>
+                    </label>
+
+
+                    <Button variant="outlined" type="submit" onClick={() => setClickedSignup(true)} sx={{
                         borderWidth: "1px",
                         borderColor: "#DED6CE",
-                        fontSize: "20px",
                         textTransform: "none",
-                        fontFamily: "Gill Sans",
+                        marginTop: "10px",
+                        width: "100px",
                         marginLeft: "55px", /* fix this */
                         "&:hover": { color: "#FFFFFF", backgroundColor: "#DED6CE", borderColor: "#DED6CE" },
                     }}>
-                        Sign Up
+                        {clickedSignup ?
+                            <CircularProgress sx={{ color: "#FFFFFF" }} /> :
+                            <Typography
+                                fontFamily={"Gill Sans"}
+                                color="#DED6CE"
+                                align='center'
+                                fontSize="20px"
+                                sx={{ "&:hover": { color: "#FFFFFF" } }}>
+                                Sign Up
+                            </Typography>}
                     </Button>
                     {err ? /* (<Alert severity="error">Please make sure you have entered a valid email address that has not been used previously.</Alert>) */ (<div>ERROR</div>) : <div></div>}
 
@@ -196,6 +209,7 @@ const Register = () => {
                         color="#DED6CE"
                         fontSize={"17px"}
                         paddingTop="8px"
+                        href="/login"
                         sx={{
                             "&:hover": { fontWeight: 550 },
                         }}

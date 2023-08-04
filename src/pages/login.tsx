@@ -1,4 +1,4 @@
-import { Box, Button, Container, Divider, FormControl, FormHelperText, Grid, IconButton, Input, InputLabel, Link, Stack, Typography } from '@mui/material'
+import { Box, Button, Container, Divider, FormControl, FormHelperText, Grid, Icon, IconButton, Input, InputLabel, Link, Stack, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Label, Visibility, VisibilityOff } from '@material-ui/icons';
@@ -61,24 +61,24 @@ const Login = () => {
                 <FormControl sx={{ ...formStyles }}>
                     <Input disableUnderline={true} sx={{ ...formStyles }}></Input>
                 </FormControl>
-                <Stack direction="row" marginRight="35px">
-                        <IconButton onClick={() => setShowPassword(!showPassword)}>
-                            {showPassword ? <Visibility /> : <VisibilityOff />}
-                        </IconButton>
-                        <Typography
-                            paddingY="5px"
-                            fontFamily={"Gill Sans"}
-                            color="#DED6CE"
-                            fontSize={"15px"}
-                            marginLeft="5px"
-                            marginRight="5px"
-                            align='center'
-                        >
-                            Password
-                        </Typography>
-                    </Stack>
+                <Stack direction="row" marginRight="25px">
+                    <Icon onClick={() => setShowPassword(!showPassword)} sx={{ marginTop: "5px", color: "#FFFFFF", "&:hover": { color: "#DED6CE" } }}>
+                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                    </Icon>
+                    <Typography
+                        paddingY="5px"
+                        fontFamily={"Gill Sans"}
+                        color="#DED6CE"
+                        fontSize={"15px"}
+                        marginLeft="5px"
+                        marginRight="5px"
+                        align='center'
+                    >
+                        Password
+                    </Typography>
+                </Stack>
                 <FormControl sx={{ ...formStyles }}>
-                    <Input type={showPassword ? "" : "password"}  disableUnderline={true} sx={{ ...formStyles}}></Input>
+                    <Input type={showPassword ? "" : "password"} disableUnderline={true} sx={{ ...formStyles }}></Input>
                 </FormControl>
                 <Button variant="outlined" sx={{
                     color: "#DED6CE",
@@ -93,24 +93,25 @@ const Login = () => {
                     Sign In
                 </Button>
                 <Stack direction="row">
-                <Typography marginTop="7px" marginRight="4px" fontFamily={"Gill Sans"}
+                    <Typography marginTop="7px" marginRight="4px" fontFamily={"Gill Sans"}
                         color="#FFFFFF"
                         fontSize={"17px"}
                         paddingTop="8px">
-                            Don't have an account?  
-                </Typography>
-                <Link marginTop="10px" fontFamily={"Gill Sans"}
+                        Don't have an account?
+                    </Typography>
+                    <Link marginTop="10px" fontFamily={"Gill Sans"}
                         color="#DED6CE"
                         fontSize={"17px"}
                         paddingTop="8px"
+                        href="/register"
                         sx={{
-                            "&:hover": {fontWeight: 550},
+                            "&:hover": { fontWeight: 550 },
                         }}
-                        >
-                            Register.
-                </Link>
+                    >
+                        Register.
+                    </Link>
                 </Stack>
-               
+
             </Box>
         </Grid>
 
