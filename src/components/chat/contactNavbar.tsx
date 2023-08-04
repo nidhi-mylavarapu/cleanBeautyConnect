@@ -1,5 +1,7 @@
 import { Circle, Logout } from "@mui/icons-material"
 import { Avatar, Stack, Typography } from "@mui/material"
+import { signOut } from "firebase/auth"
+import { auth } from "../../util/firebase"
 
 
 const ContactNavbar = () => {
@@ -28,7 +30,7 @@ const ContactNavbar = () => {
                 <Avatar src="NidhiHeadshot1.jpg" sx={{ marginTop: "13px", marginLeft: "18px", height: "55px", width: "55px"}}>N</Avatar>
                 <Typography fontFamily={"Gill Sans"}
                     color="#FFFFFF" fontSize="15px" sx={{ marginTop: "25px", marginLeft: "10px" }}>Nidhi Mylavarapu</Typography>
-                    <Logout sx={{ color:"#FFFFFF",marginTop: "28px", marginLeft: "10px", height: "20px", width: "20px" }}></Logout>
+                    <Logout onClick={() => {signOut(auth)}}sx={{ color:"#FFFFFF",marginTop: "28px", marginLeft: "10px", height: "20px", width: "20px" }}></Logout>
             </Stack>
 
 

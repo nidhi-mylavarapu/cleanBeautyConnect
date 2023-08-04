@@ -6,15 +6,19 @@ export const AuthContext = createContext(null) //some default value - put null b
 export const AuthContextProvider = ({ children }) => { //children, components
     const [currentUser, setCurrentUser] = useState({})
     useEffect(() => {
-        onAuthStateChanged(auth, (user) => {
+        const unsub = onAuthStateChanged(auth, (user) => {
             setCurrentUser(user)
             console.log(user);
         });
+
+        return () => {
+            unsub();
+        }
     }, []);
 
     return (
         <AuthContext.Provider value={{ currentUser }}>
             {children} {/* this component can reach currentUser */}
         </AuthContext.Provider>
-    )
+    );
 };
