@@ -10,12 +10,14 @@ import Home from "./pages/home";
 import Register from "./pages/register";
 import Login from "./pages/login";
 import { useContext } from "react";
+import { AuthContextProvider } from "./context/AuthContext";
 
 function App() {
 
   
   return(
-    <BrowserRouter>
+    <AuthContextProvider>
+      <BrowserRouter>
       <Routes>
         <Route path="/">
           <Route index element=<Home /> />
@@ -24,6 +26,8 @@ function App() {
         </Route>
       </Routes>
     </BrowserRouter>
+    </AuthContextProvider>
+    
   )
 }
 

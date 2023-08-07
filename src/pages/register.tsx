@@ -7,6 +7,8 @@ import { auth, db, storage } from '../util/firebase';
 import { ref, uploadBytesResumable, getDownloadURL, uploadBytes } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore";
 
+import { UserAuth } from '../context/AuthContext'
+
 const registerBoxStyles = {
     borderRadius: "20px",
     backgroundColor: "#F5EBE0",
@@ -40,58 +42,28 @@ const Register = () => {
 
     const [showPassword, setShowPassword] = useState(false)
     const [clickedSignup, setClickedSignup] = useState(false)
-    const [err, setErr] = useState(false)
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [error, setError] = useState('')
+    const { createUser } = UserAuth()
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        const displayName: string = e.target[0].value;
-        const email: string = e.target[1].value;
-        const password: string = e.target[2].value;
-        const profilePic = e.target[3].files[0];
+        const inputtedDisplayName: string = e.target[0].value;
+        const inputtedEmail: string = e.target[1].value;
+        const inputtedPassword: string = e.target[2].value;
+        const inputtedProfilePic = e.target[3].files[0];
 
+        setEmail(inputtedEmail)
+        setPassword(inputtedPassword)
+        setError('')
         try {
-            //Authentication
-            const res = await createUserWithEmailAndPassword(auth, email, password);
-
-            //Storing profile picture
-            const storageRef = ref(storage, displayName);
-            const uploadTask = uploadBytesResumable(storageRef, profilePic);
-
-            uploadTask.then(
-                () => {
-                    getDownloadURL(uploadTask.snapshot.ref).then(
-                        (downloadURL) => {
-                            updateProfile(res.user, {
-                                displayName,
-                                photoURL: downloadURL
-                            })
-                            setDoc(doc(db, "users", res.user.uid), {
-                                uid: res.user.uid,
-                                displayName,
-                                email,
-                                photoURL: downloadURL
-                            })
-                        }
-                    ).then(
-                        () => {
-                            setDoc(doc(db, "userChats", res.user.uid), {});
-                            window.location.href = '/';
-                        }
-                    )
-                },
-                () => {
-                    console.log('ERROR UPLOADING IMAGE');
-                }
-            )
-
-
+            await createUser(email, password)
         }
-        catch (err) {
-            console.log("error true here")
-            setErr(true)
+        catch (e) {
+            setError(e.message)
+            console.log(e.message)
         }
-
-
     }
 
 
@@ -194,7 +166,6 @@ const Register = () => {
                                 Sign Up
                             </Typography>}
                     </Button>
-                    {err ? /* (<Alert severity="error">Please make sure you have entered a valid email address that has not been used previously.</Alert>) */ (<div>ERROR</div>) : <div></div>}
 
                 </form>
 

@@ -3,10 +3,12 @@ import {
     createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged
 } from 'firebase/auth'
 
-import { auth, db, storage } from '../util/firebase';
+import React from 'react';
+
+import { auth } from '../util/firebase';
 
 
-const UserContext = createContext()
+export const UserContext = createContext()
 
 export const AuthContextProvider = ({children}) => {
 
