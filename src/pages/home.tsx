@@ -1,4 +1,4 @@
-import { Box, Grid, TableCell } from '@mui/material'
+import { Box, Grid, TableCell, Typography } from '@mui/material'
 import React from 'react'
 import SidePanel from '../components/chat/sidePanel'
 import ChatPanel from '../components/chat/chatPanel'
